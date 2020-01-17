@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Media;
 
 namespace Lab2
@@ -11,28 +10,43 @@ namespace Lab2
         private readonly int numberOfClusters;
         private readonly int numberOfIterations;
 
-        public KMeans(int numberOfClusters = 2, int maxNumberOfIterations = 10)
+        public KMeans(int numberOfClusters = 2, int maxNumberOfIterations = 20)
         {
             this.numberOfClusters = numberOfClusters;
             this.numberOfIterations = maxNumberOfIterations;
         }
 
-        public List<Centroid> Run(List<Point> dataSet, double widthOfCanvas, double heightOfCanvas)
+        public List<Centroid> Run(List<Point> dataset)
         {
             List<Centroid> centroidList = new List<Centroid>();
 
-            for (int i = 0; i < numberOfClusters; i++)
+            for (int i = 0; i < numberOfClusters && i < dataset.Count; i++)
             {
-                Centroid centroid = new Centroid(brushes[i], widthOfCanvas, heightOfCanvas);
+                Centroid centroid;
+                if (dataset.GetType().Equals(typeof(List<Point3D>)))
+                {
+                    centroid = new Centroid3D((dataset[i] as Point3D).Clone(), brushes[i]);
+                }
+                else
+                {
+                    centroid = new Centroid(dataset[i].Clone(), brushes[i]);
+                }
                 centroidList.Add(centroid);
             }
 
+            return Clusterisation(dataset, centroidList);
+        }
+
+        private List<Centroid> Clusterisation(List<Point> dataset, List<Centroid> centroidList)
+        {
             for (int iteration = 0; iteration < numberOfIterations; iteration++)
             {
                 foreach (Centroid centroid in centroidList)
+                {
                     centroid.Reset();
+                }
 
-                foreach (var point in dataSet)
+                foreach (var point in dataset)
                 {
                     int closestIndex = -1;
                     double minDistance = double.MaxValue;
@@ -56,7 +70,7 @@ namespace Lab2
                 bool hasChanged = false;
                 foreach (Centroid centroid in centroidList)
                 {
-                    if (centroid.HasChanged())
+                    if (centroid.HasChanged)
                     {
                         hasChanged = true;
                         break;
@@ -70,6 +84,6 @@ namespace Lab2
             }
 
             return centroidList;
-        }
+        }        
     }
 }

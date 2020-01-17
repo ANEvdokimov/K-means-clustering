@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace Lab2
@@ -8,25 +6,20 @@ namespace Lab2
     public class Centroid
     {
         private Point oldPosition;
-        private Point position;
-        public Point Position
-        {
-            get => position;
-        }
-
+        public Point Position { get; private set; }
         public Brush Brush { get; }
+        public List<Point> PointsList { get; private set; }
 
-        /// <summary>
-        /// Точки у данного центроида
-        /// </summary>
-        public List<Point> PointsList { get; set; }
-
-        private static readonly Random random = new Random();
-
-        public Centroid(Brush brush, double widthOfCanvas, double heightOfCanvas)
+        public Centroid(Brush brush)
         {
             Brush = brush;
-            position = new Point(random.Next(0, (int)widthOfCanvas), random.Next(0, (int)heightOfCanvas));
+            PointsList = new List<Point>();
+        }
+
+        public Centroid(Point position, Brush brush)
+        {
+            Brush = brush;
+            Position = position;
             PointsList = new List<Point>();
         }
 
@@ -44,11 +37,18 @@ namespace Lab2
             centroidX /= PointsList.Count;
             centroidY /= PointsList.Count;
 
-            oldPosition = position;
-            position = new Point(centroidX, centroidY);
+            oldPosition = Position;
+            if (!double.IsNaN(centroidX) && !double.IsNaN(centroidY))
+            {
+                Position = new Point(centroidX, centroidY);
+            }
+            else
+            {
+                Position = null;
+            }
         }
 
-        public bool HasChanged() => oldPosition != position;
+        public bool HasChanged => !oldPosition.Equals(Position);
 
         public void AddPoint(Point point) => PointsList.Add(point);
 

@@ -3,14 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:Lab2"
         mc:Ignorable="d"
         Title="K-means clustering" Height="450" Width="800" MouseLeftButtonUp="Window_MouseLeftButtonUp">
-    <Grid>
-        
+    <Grid>        
         <Canvas x:Name="Canvas" Margin="0,25,0,0">
             
         </Canvas>
+        
         <Menu Height="25" VerticalAlignment="Top">
             <MenuItem Header="_Start">
                 <MenuItem Header="2 Clusters" CommandParameter="2" Click="Start"/>
@@ -18,13 +19,17 @@
                 <MenuItem Header="4 Clusters" CommandParameter="4" Click="Start"/>
                 <MenuItem Header="5 Clusters" CommandParameter="5" Click="Start"/>
             </MenuItem>
-            <MenuItem Header="_Clear" Click="MenuItem_Click"/>
+            <MenuItem Header="_Clear" Click="MI_ClearClick"/>
             <MenuItem Header="_Generate">
                 <MenuItem Header="5 Points" Click="GenerateFivePoints"/>
                 <MenuItem Header="10 Points" Click="GenerateTenPoints"/>
                 <MenuItem Header="15 Points" Click="GenerateFifteenPoints"/>
                 <MenuItem Header="30 Points" Click="GenerateThirtyPoints"/>
             </MenuItem>
+            <MenuItem Header="3D">
+                <MenuItem Name="CB_3DMode" Header="On" Checked="TurnOn3DMode" Unchecked="TurnOff3DMode" IsCheckable="True"/>
+            </MenuItem>
+            <xctk:IntegerUpDown x:Name="Iud_Level" Minimum="0" Maximum="5" Value="0" IsEnabled="False" ValueChanged="Level_ValueChanged"/>
         </Menu>
     </Grid>
 </Window>
